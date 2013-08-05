@@ -1,3 +1,4 @@
+; dasm source
 	processor 6502
 	
 	org $1000
