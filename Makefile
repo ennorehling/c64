@@ -1,4 +1,4 @@
-all: flash.prg
+all: flash.prg multint.prg
 
 clean:
 	@rm *.prg
