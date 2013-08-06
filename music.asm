@@ -54,14 +54,16 @@ sysline:
 write:	lda msg,x
 	jsr $ffd2
 	inx
-	cpx #25
+	cpx #26
 	bne write
 
         ldx #$00
-setcol:	lda #$07
+	ldy #$07
+setcol: tya
 	sta $d800,x
+	iny
 	inx
-	cpx #25
+	cpx #26
 	bne setcol
 
 loop:	jmp loop
@@ -96,7 +98,4 @@ irq2:	lda #$05
 	org $1000-$7e
 	incbin "music.sid"
 
-;	org $1ffe
-;	incbin "scrap_writer_iii_17.64c"
-
-msg .byte "IMRAN IS THE BESTEST DUDE"
+msg .byte "LOREM IPSUM DOLOR SIT AMET"
