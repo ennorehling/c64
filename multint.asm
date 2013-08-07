@@ -1,11 +1,9 @@
 	processor    6502
-	org    $0810
+	org $0801 ; sys2061
+sysline:
+	.byte $0b,$08,$01,$00,$9e,$32,$30,$36,$31,$00,$00,$00
 
-	; initiate music
-	lda #$00
-	tax
-	tay
-	jsr $1000
+	org $080d ; sys2061
 
 	;clear screen
 	jsr $e544
@@ -32,7 +30,7 @@
 	sta $0314
 	stx $0315
 
-	; create rater interrupt at line 0
+	; create raster interrupt at line 0
 	ldy #$00
 	sty $d012
 
@@ -42,44 +40,16 @@
 	asl $d019
 	cli
 
-loop: inc $d020
+halt: jmp halt
+
+irq:	
+	inc $d020
 	inc $d021
-	jmp loop
 
-irq:  lda #$04
-	sta $d020
-	sta $d021
+	; Create new raster interrupt after 16 lines
+	lda #$10
+	adc $d012
+	sta $d012
 
-	jsr $1006
-
-	lda #<irq2
-	ldx #>irq2
-	sta $0314
-	stx $0315
-
-	; Create raster interrupt at line 160
-	ldy #160
-	sty $d012
-
-	asl $d019
-	jmp    $ea81
-
-irq2:
-	lda #$05
-	sta $d020
-	sta $d021
-
-	lda #<irq
-	ldx #>irq
-	sta $0314
-	stx $0315
-
-	ldy #$00
-	sty $d012
-
-	asl $d019
-	jmp    $ea81
-
-	org $1000-$7e
-	INCBIN "music.sid"
-
+	asl $d019 ; ack interrupt
+	jmp $ea81 ; restore stack

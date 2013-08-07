@@ -13,10 +13,10 @@ sysline:
 	tax
 	tay
 	jsr $1000 ; init sid
-	
+
 	; interrupt init
 	sei
-	
+
 	; disable cia1, ci2, vic intr
 	lda #$7f
 	sta $dc0d
@@ -25,7 +25,7 @@ sysline:
 	; enable raster intr
 	lda #$01
 	sta $d01a
-	
+
 	; enter single-color mode
 	lda #$1b
 	ldx #$08
@@ -41,7 +41,7 @@ sysline:
 
 	ldy #$7e ; raster interrupt at line 7e
 	sty $d012
-	
+
 	; clear pending intr.
 	lda $dc0d
 	lda $dd0d
